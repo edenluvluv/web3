@@ -52,18 +52,12 @@ app.get('/admin', (req, res) => {
 function generateUserID() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
-function isAdmin(req, res, next) {
-  const username = req.session.username;
-  if (!username) {
-    return res.status(403).send('Access denied');
-  }
+function isAdmin(username) {
 
-  User.findOne({ username, isAdmin: true }, (err, user) => {
-    if (err || !user) {
-      return res.status(403).send('Access denied');
-    }
-    next();
-  });
+  const res = User.findOne({ username: username, isAdmin: true })
+  return res !== null
+
+  // return res.status(403).send('Access denied');
 }
 
 
@@ -143,19 +137,26 @@ app.post('/admin/edit-user', isAdmin, async (req, res) => {
 });
 
 // Delete User Route
-app.post('/admin/delete-user', isAdmin, async (req, res) => {
+app.post('/admin/delete-user', async (req, res) => {
   const { username } = req.body;
-
-  try {
-    const user = await User.findOneAndDelete({ username });
-    if (!user) {
-      return res.status(404).send('User not found');
+  
+  if(isAdmin(username)){
+    try {
+      console.log(username);
+      const user = await User.deleteOne({ username: username });
+      console.log(user);
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+      res.render('admin', { message: 'User deleted successfully' });
+    } catch (error) {
+      console.error('User deletion error:', error);
+      res.status(500).send('Internal Server Error');
     }
-    res.render('admin', { message: 'User deleted successfully' });
-  } catch (error) {
-    console.error('User deletion error:', error);
-    res.status(500).send('Internal Server Error');
+  }else{
+    res.status(403).send('Access denied');
   }
+  
 });
 
 
@@ -168,20 +169,6 @@ app.get('/main', (req, res) => {
 app.get('/admin', isAdmin, (req, res) => {
   res.render('admin');
 });
-
-function isAdmin(req, res, next) {
-  const username = req.session.username;
-  if (!username) {
-    return res.status(403).send('Access denied');
-  }
-
-  User.findOne({ username, isAdmin: true }, (err, user) => {
-    if (err || !user) {
-      return res.status(403).send('Access denied');
-    }
-    next();
-  });
-}
 
 
 // Start the server
