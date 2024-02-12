@@ -1,0 +1,22 @@
+<!-- admin.ejs -->
+<h1>Welcome Admin!</h1>
+
+<!-- Create User Form -->
+<form action="/admin/create-user" method="POST">
+  <input type="text" name="username" placeholder="Username">
+  <input type="password" name="password" placeholder="Password">
+  <button type="submit">Create User</button>
+</form>
+
+<!-- Edit User Form -->
+<form action="/admin/edit-user" method="POST">
+  <input type="text" name="username" placeholder="Username to edit">
+  <input type="password" name="password" placeholder="New Password">
+  <button type="submit">Edit User</button>
+</form>
+
+<!-- Delete User Form -->
+<form action="/admin/delete-user" method="POST">
+  <input type="text" name="username" placeholder="Username to delete">
+  <button type="submit">Delete User</button>
+</form>
