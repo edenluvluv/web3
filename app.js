@@ -17,7 +17,6 @@ const apiKey = 'fc1e127af9212921e0257e83ec25f717';
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Function to generate a random 6-digit user ID
 function generateUserID() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
@@ -34,7 +33,6 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
-// Weather route
 app.get('/weather', (req, res) => {
   res.render('weather', { weather: null, error: null });
 });
@@ -77,7 +75,6 @@ function fetchWeather(url, res) {
         weatherTextExpanded += `\nPressure: ${pressure} hPa`;
         weatherTextExpanded += `\nWind Speed: ${windSpeed} m/s`;
 
-        // Pass minTemp, maxTemp, pressure, and windSpeed to the weather template
         res.render('weather', { weather: weatherTextExpanded, error: null, minTemp, maxTemp, pressure, windSpeed });
       }
     }
@@ -92,9 +89,6 @@ app.get('/admin', (req, res) => {
 });
 
 
-
-
-// Function to generate a random 6-digit user ID
 function generateUserID() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
@@ -120,8 +114,8 @@ app.post('/register', async (req, res) => {
     const user = await User.create({
       username: username,
       password: password,
-      userID: generateUserID(), // Call the generateUserID function here
-      isAdmin: username === 'your_admin_username' // Set admin status based on username
+      userID: generateUserID(), 
+      isAdmin: username === 'your_admin_username' 
     });
     res.render('success', { message: 'Registration successful', link: '/login' });
   } catch (error) {
@@ -131,7 +125,6 @@ app.post('/register', async (req, res) => {
 });
 
 
-// Login POST route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -141,7 +134,6 @@ app.post('/login', async (req, res) => {
       return res.status(404).send('Invalid username or password');
     }
 
-    // Redirect to corresponding page based on user role
     if (user.isAdmin) {
       res.redirect('/admin');
     } else {
@@ -154,7 +146,6 @@ app.post('/login', async (req, res) => {
 });
 
 
-// Create User Route
 app.post('/admin/create-user', isAdmin, async (req, res) => {
   const { username, password } = req.body;
 
@@ -162,8 +153,8 @@ app.post('/admin/create-user', isAdmin, async (req, res) => {
     const user = await User.create({
       username: username,
       password: password,
-      userID: generateUserID(), // Call the generateUserID function here
-      isAdmin: false // Set admin status to false as only admin can create admins
+      userID: generateUserID(), 
+      isAdmin: false 
     });
     res.render('admin', { message: 'User created successfully' });
   } catch (error) {
@@ -172,7 +163,6 @@ app.post('/admin/create-user', isAdmin, async (req, res) => {
   }
 });
 
-// Edit User Route
 app.post('/admin/edit-user', isAdmin, async (req, res) => {
   const { username, password } = req.body;
 
@@ -188,7 +178,6 @@ app.post('/admin/edit-user', isAdmin, async (req, res) => {
   }
 });
 
-// Delete User Route
 app.post('/admin/delete-user', isAdmin, async (req, res) => {
   const { username } = req.body;
 
@@ -205,12 +194,10 @@ app.post('/admin/delete-user', isAdmin, async (req, res) => {
 });
 
 
-// Main page route (only accessible after login)
 app.get('/main', (req, res) => {
   res.render('main');
 });
 
-// Admin panel routes
 app.get('/admin', isAdmin, (req, res) => {
   res.render('admin');
 });
@@ -231,7 +218,6 @@ function isAdmin(req, res, next) {
 }
 
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
