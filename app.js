@@ -1,12 +1,8 @@
-//app.js
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-const User = require('./models/user');
-const path = require('path');
+const request = require('request');
 const session = require('express-session');
-
+const User = require('./models/user');
 
 const app = express();
 const port = 3000;
@@ -16,14 +12,20 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-
+const apiKey = 'fc1e127af9212921e0257e83ec25f717';
 
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Function to generate a random 6-digit user ID
+function generateUserID() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
+
 app.get('/login', (req, res) => {
   res.render('login');
 });
@@ -32,14 +34,58 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
-// Define a route handler for '/weather'
+// Weather route
 app.get('/weather', (req, res) => {
-  res.render('weather');
+  res.render('weather', { weather: null, error: null });
 });
 
-app.get('/mainforadmin', (req, res) => {
-  res.render('mainforadmin');
+app.post('/weather', (req, res) => {
+  let city = req.body.city;
+  let longitude = req.body.longitude;
+  let latitude = req.body.latitude;
+
+  if (!city && longitude && latitude) {
+    let url = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
+    fetchWeather(url, res);
+  } else if (city && !longitude && !latitude) {
+    let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+    fetchWeather(url, res);
+  } else {
+    res.render('weather', { weather: null, error: 'Please provide either a city name or longitude and latitude.' });
+  }
 });
+
+function fetchWeather(url, res) {
+  request(url, function (err, response, body) {
+    if (err) {
+      res.render('weather', { weather: null, error: 'Error, please try again' });
+    } else {
+      let weather = JSON.parse(body);
+      if (weather.main === undefined) {
+        res.render('weather', { weather: null, error: 'Error, please try again' });
+      } else {
+        let city = weather.name;
+        let minTemp = weather.main.temp_min;
+        let maxTemp = weather.main.temp_max;
+        let pressure = weather.main.pressure;
+        let windSpeed = weather.wind.speed;
+
+        let weatherTextExpanded = `Currently in ${city}, it's ${weather.main.temp} degrees Celsius with ${weather.main.humidity}% humidity. The weather conditions are ${weather.weather[0].description}.`;
+        
+        weatherTextExpanded += `\nMin Temperature: ${minTemp}°C`;
+        weatherTextExpanded += `\nMax Temperature: ${maxTemp}°C`;
+        weatherTextExpanded += `\nPressure: ${pressure} hPa`;
+        weatherTextExpanded += `\nWind Speed: ${windSpeed} m/s`;
+
+        // Pass minTemp, maxTemp, pressure, and windSpeed to the weather template
+        res.render('weather', { weather: weatherTextExpanded, error: null, minTemp, maxTemp, pressure, windSpeed });
+      }
+    }
+  });
+}
+
+
+
 
 app.get('/admin', (req, res) => {
   res.render('admin');
@@ -97,7 +143,7 @@ app.post('/login', async (req, res) => {
 
     // Redirect to corresponding page based on user role
     if (user.isAdmin) {
-      res.redirect('/mainforadmin');
+      res.redirect('/admin');
     } else {
       res.redirect('/weather');
     }
@@ -168,6 +214,7 @@ app.get('/main', (req, res) => {
 app.get('/admin', isAdmin, (req, res) => {
   res.render('admin');
 });
+
 
 function isAdmin(req, res, next) {
   const username = req.session.username;

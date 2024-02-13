@@ -1,129 +1,74 @@
-<!-- weather.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Astro Traveler</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <title>Weather App</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
   <style>
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: 'Open Sans', sans-serif;
+      background-color: #f0f0f0;
       margin: 0;
       padding: 0;
-      background-color: #f2f2f2;
-      min-height: 100vh;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-
-    form {
-      max-width: 600px;
-      margin: 20px auto;
+    .container {
       background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
+      padding: 20px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-
-    input {
-      width: calc(100% - 16px);
-      padding: 8px;
-      margin-bottom: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    button {
-      background-color: #a54caf;
-      color: #fff;
-      padding: 10px 15px;
+    .container fieldset {
       border: none;
-      border-radius: 4px;
-      cursor: pointer;
     }
-
-    button:hover {
-      background-color: #58205e;
-    }
-    #weather-info, #map {
-      margin: 20px auto;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
-
-    #map {
-      height: 500px;
-    }
-    #nasa-info {
-      margin: 20px auto;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
-
-    footer {
-      text-align: center;
+    .ghost-input {
+      width: calc(100% - 22px);
       padding: 10px;
-      background-color: #333;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .ghost-button {
+      padding: 10px 20px;
+      background-color: #007bff;
       color: #fff;
-      clear: both;
-      margin-top: auto;
-    
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
-    @media (min-width: 768px) {
-      #weather-info, #map {
-        max-width: 600px;
-      }
-    }
-
-    @media (max-width: 767px) {
-      #coordinates-form {
-        max-width: 80%;
-      }
+    .ghost-button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 class="text-center">Info provider about your destination place</h1>
-    <form id="coordinates-form" class="mx-auto">
-      <h1 class="text-center">Enter coordinates</h1>
-    <label for="latitude">Latitude:</label>
-    <input type="text" id="latitude" name="latitude" placeholder="Enter latitude" required>
-
-    <label for="longitude">Longitude:</label>
-    <input type="text" id="longitude" name="longitude" placeholder="Enter longitude" required>
-
-    <button type="submit">Get Info</button>
-  </form>
-  <div id="weather-info"></div>
-  <div id="nasa-info"></div>
-  <div id="map"></div>
-</div>
-
-  <footer>
-    <p>&copy; Bayazitova Kamila | SE-2206</p>
-  </footer>
-
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="weather.js"></script>
+    <fieldset>
+      <form action="/weather" method="post">
+        <input name="city" type="text" class="ghost-input" placeholder="Enter a City">
+        <input name="longitude" type="number" step="any" class="ghost-input" placeholder="Longitude">
+        <input name="latitude" type="number" step="any" class="ghost-input" placeholder="Latitude">
+        <input type="submit" class="ghost-button" value="Get Weather">
+      </form>
+      <% if(weather !== null){ %>
+        <h3><%= weather %></h3>
+      <% } %>
+      <% if(error !== null){ %>
+        <p><%= error %></p>
+      <% } %>
+      <% if(weather !== null){ %>
+        <p>Minimum Temperature: <%= minTemp %>°C</p>
+        <p>Maximum Temperature: <%= maxTemp %>°C</p>
+        <p>Pressure: <%= pressure %> hPa</p>
+        <p>Wind Speed: <%= windSpeed %> m/s</p>
+      <% } %>
+    </fieldset>
+  </div>
 </body>
 </html>
