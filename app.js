@@ -62,16 +62,43 @@ app.get('/weather', (req, res) => {
   res.render('weather', { weather: null, error: null });
 });
 
+app.get('/history', async (req, res) => {
+  try {
+    const history = await History.find().sort({ timestamp: -1 }).limit(10); // Example: Fetch last 10 history records
+    res.render('history', { history });
+  } catch (error) {
+    console.error('Error fetching history:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+const History = require('./models/history');
+
 app.post('/weather', (req, res) => {
   let city = req.body.city;
 
   if (city) {
     let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+    logRequest(req.session.username, '/weather', { city }, 'Success');
     fetchWeather(url, res);
   } else {
+    logRequest(req.session.username, '/weather', { city }, 'Error: ' + error);
     res.render('weather', { weather: null, error: 'Please provide a city name.' });
   }
 });
+
+function logRequest(user, endpoint, requestData, outcome) {
+  const historyData = {
+    user: user || 'Anonymous',
+    endpoint,
+    requestData,
+    outcome,
+    timestamp: new Date()
+  };
+  History.create(historyData)
+    .then(() => console.log('Request logged:', historyData))
+    .catch(error => console.error('Error logging request:', error));
+}
 
 function fetchWeather(url, res) {
   request(url, function (err, response, body) {
@@ -140,7 +167,7 @@ app.post('/register', async (req, res) => {
     user.createdAt = new Date();
     user.updatedAt = new Date();
     await user.save();
-    
+
     res.render('success', { message: 'Registration successful', link: '/login' });
   } catch (error) {
     console.error('Registration error:', error);
