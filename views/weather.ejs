@@ -45,6 +45,16 @@
     .ghost-button:hover {
       background-color: #0056b3;
     }
+    .action-links {
+    display: flex;
+    align-items: center;
+    flex-direction: column; 
+    margin-top: 20px;
+}
+
+.action-links form {
+    margin-bottom: 10px;
+}
     button {
             padding: 10px;
             font-size: 16px;
@@ -83,14 +93,13 @@
       <% } %>
     </fieldset>
     <div class="container">
-      <h1>Now you can use the website.</h1>
       <div class="action-links">
           <form method="get" action="/top-news">
               <button>Want some news?</button>
           </form>
-          <form method="get" action="/nasa">
-              <button>Want 1 NASA picture?</button>
-          </form>
+          <form method="get" action="/nasa-picture">
+            <button>Want a NASA picture?</button>
+        </form>
       </div>
   </div>
     <footer>Bayazitova Kamila | SE-2206</footer>

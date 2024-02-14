@@ -16,6 +16,20 @@ app.use(session({
 
 const apiKey = 'fc1e127af9212921e0257e83ec25f717';
 const newsApiKey = 'ac89d2647153421abc38717738f50dd6'
+
+app.get('/nasa-picture', async (req, res) => {
+  try {
+      const nasaApiUrl = 'https://api.nasa.gov/planetary/apod?api_key=W7V7PbNMvgC9oFWaTO1g8gxEBgeA3rcuevhJU3Ln';
+      const response = await fetch(nasaApiUrl);
+      const pictureData = await response.json();
+      res.render('nasa-picture', { pictureData });
+  } catch (error) {
+      console.error('Error fetching NASA picture:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 

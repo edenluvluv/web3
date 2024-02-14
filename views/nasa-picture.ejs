@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA Picture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        img {
+            max-width: 80%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        p {
+            color: #555;
+            max-width: 80%;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        footer {
+            margin-top: 20px;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>NASA Picture of the Day</h1>
+    <img src="<%= pictureData.url %>" alt="NASA Picture">
+    <p><%= pictureData.title %></p>
+    <p><%= pictureData.explanation %></p>
+    <footer>Bayazitova Kamila | SE-2206</footer>
+</body>
+</html>
