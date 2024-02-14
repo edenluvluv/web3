@@ -58,24 +58,18 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
-
 app.get('/weather', (req, res) => {
   res.render('weather', { weather: null, error: null });
 });
 
 app.post('/weather', (req, res) => {
   let city = req.body.city;
-  let longitude = req.body.longitude;
-  let latitude = req.body.latitude;
 
-  if (!city && longitude && latitude) {
-    let url = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
-    fetchWeather(url, res);
-  } else if (city && !longitude && !latitude) {
+  if (city) {
     let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
     fetchWeather(url, res);
   } else {
-    res.render('weather', { weather: null, error: 'Please provide either a city name or longitude and latitude.' });
+    res.render('weather', { weather: null, error: 'Please provide a city name.' });
   }
 });
 
@@ -102,7 +96,6 @@ function fetchWeather(url, res) {
         weatherTextExpanded += `\nWind Speed: ${windSpeed} m/s`;
 
         res.render('weather', { weather: weatherTextExpanded, error: null, minTemp, maxTemp, pressure, windSpeed});
-
       }
     }
   });
@@ -189,6 +182,7 @@ app.post('/admin/create-user', isAdmin, async (req, res) => {
       userID: generateUserID(), 
       isAdmin: false 
     });
+    return res.status(404).send('User created successfully');
     res.render('admin', { message: 'User created successfully' });
   } catch (error) {
     console.error('User creation error:', error);
@@ -198,19 +192,26 @@ app.post('/admin/create-user', isAdmin, async (req, res) => {
 
 
 app.post('/admin/edit-user', isAdmin, async (req, res) => {
-  const { username, password } = req.body;
+  const { oldUsername, newUsername, newPassword } = req.body;
 
   try {
-    const user = await User.findOneAndUpdate({ username }, { password }, { new: true });
+    const user = await User.findOneAndUpdate(
+      { username: oldUsername },
+      { username: newUsername, password: newPassword },
+      { new: true }
+    );
+
     if (!user) {
       return res.status(404).send('User not found');
     }
+    return res.status(404).send('User edited successfully');
     res.render('admin', { message: 'User edited successfully' });
   } catch (error) {
     console.error('User edit error:', error);
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 
 app.post('/admin/delete-user', isAdmin, async (req, res) => {
@@ -246,7 +247,7 @@ function isAdmin(req, res, next) {
     return res.status(403).send('Access denied. not logged');
   }
 
-  if(username === 'admin') {
+  if(username === 'kamila') {
     next();
   } else {
     return res.status(403).send('Access denied. not admin');

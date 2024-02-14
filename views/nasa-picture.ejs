@@ -41,6 +41,21 @@
             color: #777;
             font-size: 14px;
         }
+
+        .back-button {
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -48,6 +63,9 @@
     <img src="<%= pictureData.url %>" alt="NASA Picture">
     <p><%= pictureData.title %></p>
     <p><%= pictureData.explanation %></p>
+    <form method="get" action="/weather">
+        <button class="back-button">Go Back to Weather</button>
+    </form>
     <footer>Bayazitova Kamila | SE-2206</footer>
 </body>
 </html>

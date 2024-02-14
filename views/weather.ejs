@@ -22,6 +22,7 @@
       padding: 20px 40px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
     }
     .container fieldset {
       border: none;
@@ -34,6 +35,7 @@
       border-radius: 5px;
     }
     .ghost-button {
+      align-items: center;
       padding: 10px 20px;
       background-color: #007bff;
       color: #fff;
@@ -41,6 +43,7 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s;
+      display: inline-block;
     }
     .ghost-button:hover {
       background-color: #0056b3;
@@ -75,30 +78,24 @@
     <fieldset>
       <form action="/weather" method="post">
         <input name="city" type="text" class="ghost-input" placeholder="Enter a City">
-        <input name="longitude" type="number" step="any" class="ghost-input" placeholder="Longitude">
-        <input name="latitude" type="number" step="any" class="ghost-input" placeholder="Latitude">
         <input type="submit" class="ghost-button" value="Get Weather">
       </form>
       <% if(weather !== null){ %>
         <h3><%= weather %></h3>
-      <% } %>
-      <% if(error !== null){ %>
-        <p><%= error %></p>
-      <% } %>
-      <% if(weather !== null){ %>
         <p>Minimum Temperature: <%= minTemp %>°C</p>
         <p>Maximum Temperature: <%= maxTemp %>°C</p>
         <p>Pressure: <%= pressure %> hPa</p>
         <p>Wind Speed: <%= windSpeed %> m/s</p>
       <% } %>
+      <% if(error !== null){ %>
+        <p><%= error %></p>
+      <% } %>
     </fieldset>
-    <div class="container">
       <div class="action-links">
           <form method="get" action="/nasa-picture">
             <button>Want a NASA picture?</button>
         </form>
       </div>
-  </div>
     <footer>Bayazitova Kamila | SE-2206</footer>
     </div>
 </body>

@@ -45,16 +45,19 @@
         p {
             margin: 5px 0;
         }
-        button {
-            padding: 10px;
-            font-size: 16px;
+
+        .back-button {
+            margin-top: 20px;
             background-color: #007bff;
+            color: #fff;
             border: none;
             border-radius: 5px;
-            color: #fff;
+            padding: 10px 20px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
-        button:hover {
+
+        .back-button:hover {
             background-color: #0056b3;
         }
     </style>
@@ -76,6 +79,9 @@
         <% } else { %>
             <p>No user data available.</p>
         <% } %>
+        <form method="get" action="/register">
+            <button class="back-button">Go Back to register</button>
+        </form>
     </div>
 </body>
 </html>
