@@ -45,6 +45,19 @@
     .ghost-button:hover {
       background-color: #0056b3;
     }
+    button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
   </style>
 </head>
 <body>
@@ -69,6 +82,18 @@
         <p>Wind Speed: <%= windSpeed %> m/s</p>
       <% } %>
     </fieldset>
+    <div class="container">
+      <h1>Now you can use the website.</h1>
+      <div class="action-links">
+          <form method="get" action="/top-news">
+              <button>Want some news?</button>
+          </form>
+          <form method="get" action="/nasa">
+              <button>Want 1 NASA picture?</button>
+          </form>
+      </div>
   </div>
+    <footer>Bayazitova Kamila | SE-2206</footer>
+    </div>
 </body>
 </html>

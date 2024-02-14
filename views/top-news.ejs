@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top News</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 20px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    p {
+      color: #333;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Top News</h1>
+    <% if (newsData && newsData.articles && newsData.articles.length > 0) { %>
+      <ul>
+        <% newsData.articles.forEach(function(article) { %>
+          <li>
+            <h2><%= article.title %></h2>
+            <p><%= article.description %></p>
+            <% if (article.url) { %>
+              <a href="<%= article.url %>" target="_blank">Read more</a>
+            <% } %>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>No news available for this city.</p>
+    <% } %>
+  </div>
+</body>
+</html>
