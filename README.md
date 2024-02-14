@@ -1,5 +1,8 @@
 # web3
+
 ## Assignment3
+
+### Admin username and password are my name(all lowercase letters)
 
 This is a Node.js application built with Express.js framework for handling HTTP requests. The application provides functionality for user authentication, fetching weather information, fetching top random user data, and retrieving NASA's picture of the day. Also it provides admin panel where user with admin rights can watch user history(API requests) or create,edit or delete other users.
 
@@ -40,4 +43,3 @@ Access the application by visiting http://localhost:3000 in your web browser.
 
 3.NASA API: The NASA API is used to retrieve the Picture of the Day (APOD). 
 
-## Admin username and password are my name(all lowercase letters)
