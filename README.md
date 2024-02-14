@@ -39,3 +39,5 @@ Access the application by visiting http://localhost:3000 in your web browser.
 2.NewsAPI: NewsAPI is employed to fetch top news headlines. The application uses NewsAPI to provide users with the latest news based on their input (city name). 
 
 3.NASA API: The NASA API is used to retrieve the Picture of the Day (APOD). 
+
+## Admin username and password are my name(all lowercase letters)
