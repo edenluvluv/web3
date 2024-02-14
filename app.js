@@ -1,3 +1,4 @@
+//app.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
@@ -14,8 +15,19 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.get('/random-user', async (req, res) => {
+  try {
+    const randomUserApiUrl = 'https://randomuser.me/api/';
+    const response = await fetch(randomUserApiUrl);
+    const userData = await response.json();
+    res.render('random-user', { userData });
+  } catch (error) {
+    console.error('Error fetching random user data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 const apiKey = 'fc1e127af9212921e0257e83ec25f717';
-const newsApiKey = 'ac89d2647153421abc38717738f50dd6'
 
 app.get('/nasa-picture', async (req, res) => {
   try {
@@ -33,23 +45,7 @@ app.get('/nasa-picture', async (req, res) => {
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/top-news', async (req, res) => {
-  const city = req.body.city;
-  if (!city) {
-    return res.status(400).send('City parameter is missing');
-  }
 
-  try {
-    const newsUrl = `https://newsapi.org/v2/top-headlines?q=${city}&apiKey=${newsApiKey}`;
-    const response = await fetch(newsUrl);
-    const newsData = await response.json();
-    res.json(newsData);
-  } catch (error) {
-    console.error('Error fetching news:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-let existingHtml = "";
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
@@ -62,27 +58,6 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
-app.get('/top-news', (req, res) => {
-  res.render('top-news', { newsData: null });
-});
-
-
-app.post('/top-news', async (req, res) => {
-  const city = req.body.city;
-  if (!city) {
-    return res.status(400).send('City parameter is missing');
-  }
-
-  try {
-    const newsUrl = `https://newsapi.org/v2/everything?q=${city}&apiKey=${newsApiKey}`;
-    const response = await fetch(newsUrl);
-    const newsData = await response.json();
-    res.render('top-news', { newsData: newsData });
-  } catch (error) {
-    console.error('Error fetching news:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
 
 app.get('/weather', (req, res) => {
   res.render('weather', { weather: null, error: null });
