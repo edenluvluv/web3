@@ -22,10 +22,10 @@ const User = mongoose.model('users', {
     username: String,
     password: String,
     isAdmin: Boolean,
-    createdAt: Date,
-    updatedAt: Date,
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
     userID: String,
-    deletedAt: Date
+    deletedAt: { type: Date, default: null }
 });
 
 module.exports = User

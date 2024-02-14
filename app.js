@@ -137,6 +137,9 @@ app.post('/register', async (req, res) => {
       userID: generateUserID(), 
       isAdmin: username === 'admin' 
     });
+    user.createdAt = new Date();
+    user.updatedAt = new Date();
+    await user.save();
     
     res.render('success', { message: 'Registration successful', link: '/login' });
   } catch (error) {
@@ -182,6 +185,10 @@ app.post('/admin/create-user', isAdmin, async (req, res) => {
       userID: generateUserID(), 
       isAdmin: false 
     });
+    user.createdAt = new Date();
+    user.updatedAt = new Date();
+    await user.save(); 
+
     return res.status(404).send('User created successfully');
     res.render('admin', { message: 'User created successfully' });
   } catch (error) {
