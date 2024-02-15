@@ -23,6 +23,7 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: center;
+      width: 50%;
     }
     .container fieldset {
       border: none;
@@ -49,32 +50,47 @@
       background-color: #0056b3;
     }
     .action-links {
-    display: flex;
-    align-items: center;
-    flex-direction: column; 
-    margin-top: 20px;
-}
-
-.action-links form {
-    margin-bottom: 10px;
-}
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+    }
     button {
-            padding: 10px;
-            font-size: 16px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            color: #fff;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-
+      padding: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .separator {
+      color: darkred;
+      font-size: 20px; 
+      margin: 0 10px; 
+    }
+    .action-links a {
+      text-decoration: none; 
+      color: darkred;
+      margin: 0 10px; 
+      font-weight: bold;
+      font-size: 25px;
+    }
+    .action-links a:hover {
+      text-decoration: underline; 
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <nav class="action-links">
+      <a href="/nasa-picture">Want a NASA picture?</a>
+      <p class="separator">|</p>
+      <a href="/login">Log out</a>
+    </nav>
     <fieldset>
       <form action="/weather" method="post">
         <input name="city" type="text" class="ghost-input" placeholder="Enter a City">
@@ -91,15 +107,7 @@
         <p><%= error %></p>
       <% } %>
     </fieldset>
-      <div class="action-links">
-          <form method="get" action="/nasa-picture">
-            <button>Want a NASA picture?</button>
-        </form>
-        <form method="get" action="/login">
-          <button>Log out</button>
-      </form>
-      </div>
     <footer>Bayazitova Kamila | SE-2206</footer>
-    </div>
+  </div>
 </body>
 </html>

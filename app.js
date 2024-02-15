@@ -21,9 +21,11 @@ app.get('/random-user', async (req, res) => {
     const response = await fetch(randomUserApiUrl);
     const userData = await response.json();
     res.render('random-user', { userData });
+    logRequest(req.session.username, '/random-user', null, 'Success');
   } catch (error) {
     console.error('Error fetching random user data:', error);
     res.status(500).send('Internal Server Error');
+    logRequest(req.session.username, '/random-user', null, 'Failure', error.message);
   }
 });
 
@@ -31,13 +33,15 @@ const apiKey = 'fc1e127af9212921e0257e83ec25f717';
 
 app.get('/nasa-picture', async (req, res) => {
   try {
-      const nasaApiUrl = 'https://api.nasa.gov/planetary/apod?api_key=W7V7PbNMvgC9oFWaTO1g8gxEBgeA3rcuevhJU3Ln';
-      const response = await fetch(nasaApiUrl);
-      const pictureData = await response.json();
-      res.render('nasa-picture', { pictureData });
+    const nasaApiUrl = 'https://api.nasa.gov/planetary/apod?api_key=W7V7PbNMvgC9oFWaTO1g8gxEBgeA3rcuevhJU3Ln';
+    const response = await fetch(nasaApiUrl);
+    const pictureData = await response.json();
+    res.render('nasa-picture', { pictureData });
+    logRequest(req.session.username, '/nasa-picture', null, 'Success');
   } catch (error) {
-      console.error('Error fetching NASA picture:', error);
-      res.status(500).send('Internal Server Error');
+    console.error('Error fetching NASA picture:', error);
+    res.status(500).send('Internal Server Error');
+    logRequest(req.session.username, '/nasa-picture', null, 'Failure', error.message);
   }
 });
 
@@ -87,19 +91,20 @@ app.post('/weather', (req, res) => {
   }
 });
 
-function logRequest(user, endpoint, requestData, outcome) {
+
+function logRequest(user, endpoint, requestData, outcome, error) {
   const historyData = {
     user: user || 'Anonymous',
     endpoint,
     requestData,
     outcome,
+    error,
     timestamp: new Date()
   };
   History.create(historyData)
     .then(() => console.log('Request logged:', historyData))
     .catch(error => console.error('Error logging request:', error));
 }
-
 function fetchWeather(url, res) {
   request(url, function (err, response, body) {
     if (err) {

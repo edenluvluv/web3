@@ -67,10 +67,38 @@
     a:hover {
       text-decoration: underline;
     }
+    .separator {
+      color: darkred;
+      font-size: 20px; 
+      margin: 0 10px; 
+    }
+    .action-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      color: darkred;
+      font-size: 24px; 
+    }
+    .action-links a {
+      text-decoration: none; 
+      color: darkred;
+      margin: 0 10px; 
+      font-weight: bold;
+      font-size: 25px;
+    }
+    .action-links a:hover {
+      text-decoration: underline; 
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <nav class="action-links">
+      <a href="/history">View history</a>
+      <p class="separator">|</p>
+      <a href="/login">Log out</a>
+    </nav>
     <h1>Welcome Admin!</h1>
     <form action="/admin/create-user" method="POST">
       <input type="text" name="username" placeholder="Username" required>
@@ -89,9 +117,6 @@
       <input type="text" name="username" placeholder="Username to delete" required>
       <button type="submit">Delete User</button>
     </form>
-
-    <a href="/login">Go back to login</a> <p>  |  </p>
-    <a href="/history">View History</a>
   </div>
 </body>
 </html>
